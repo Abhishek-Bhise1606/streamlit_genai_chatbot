@@ -1,3 +1,6 @@
+import streamlit as st
+
+st.write("Key exists:", "GROQ_API_KEY" in st.secrets)
 from dotenv import load_dotenv
 import streamlit as st
 from langchain_groq import ChatGroq
