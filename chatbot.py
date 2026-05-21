@@ -1,21 +1,58 @@
+from dotenv import load_dotenv
 import streamlit as st
 from langchain_groq import ChatGroq
 
-st.title("🤖 Chatbot")
+# load env variables
+load_dotenv()
 
-api_key = st.secrets["GROQ_API_KEY"]
-
-st.write(api_key[:10])   # temporary test
-
-llm = ChatGroq(
-    api_key=api_key,
-    model="llama-3.3-70b-versatile",
-    temperature=0.0,
+# streamlit page setup
+st.set_page_config(
+    page_title="Generative AI ChatBot",
+    page_icon="📥",
+    layout="centered",
 )
 
-user_input = st.chat_input("Ask something")
+st.title("🤖CHOTU")
 
-if user_input:
-    response = llm.invoke(user_input)
+# initiate chat history
+if "chat_history" not in st.session_state:
+    st.session_state["chat_history"] = []
 
-    st.write(response.content)
+# show old chat messages
+for message in st.session_state.chat_history:
+    with st.chat_message(message["role"]):#with:Every thing belong to that chat bubbal
+        st.markdown(message["content"])
+
+# initialize LLM
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",# we can use diffrence models from groq
+    temperature=0.0,# controls randon ness
+)
+
+# user input
+user_prompt = st.chat_input("Ask a question")
+
+if user_prompt:# runs only user enter something
+
+    # show user message
+    st.chat_message("user").markdown(user_prompt)# disply user message instantly
+
+    # save user message
+    st.session_state.chat_history.append({"role": "user", "content": user_prompt}
+    )
+
+    # generate response
+    # invoke :send request to model
+    response = llm.invoke(
+        input=[{"role":"system","content":"you are a helpful assistant"},*st.session_state.chat_history
+    ])#* unpack list items
+
+    assistant_response = response.content
+
+    # save assistant response
+    st.session_state.chat_history.append(
+        {"role": "assistant", "content": assistant_response}
+    )
+    # show assistant response
+    with st.chat_message("assistant"):
+        st.markdown(assistant_response)
