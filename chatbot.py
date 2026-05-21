@@ -1,4 +1,6 @@
+import streamlit as st
 
+st.write(st.secrets)
 import streamlit as st
 from langchain_groq import ChatGroq
 
