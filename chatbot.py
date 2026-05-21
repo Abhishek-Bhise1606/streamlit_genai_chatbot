@@ -1,9 +1,9 @@
-from dotenv import load_dotenv
+
 import streamlit as st
 from langchain_groq import ChatGroq
 
 # load env variables
-load_dotenv()
+
 
 # streamlit page setup
 st.set_page_config(
@@ -12,7 +12,7 @@ st.set_page_config(
     layout="centered",
 )
 
-st.title("🤖Chatbot")
+st.title("🤖CHOTU")
 
 # initiate chat history
 if "chat_history" not in st.session_state:
@@ -25,10 +25,10 @@ for message in st.session_state.chat_history:
 
 # initialize LLM
 llm = ChatGroq(
-    model="llama-3.3-70b-versatile",# we can use diffrence models from groq
-    temperature=0.0,# controls randon ness
+    groq_api_key=st.secrets["GROQ_API_KEY"],
+    model="llama-3.3-70b-versatile",
+    temperature=0.0,
 )
-
 # user input
 user_prompt = st.chat_input("Ask a question")
 
