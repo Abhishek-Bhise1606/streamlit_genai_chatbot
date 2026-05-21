@@ -12,7 +12,7 @@ st.set_page_config(
     layout="centered",
 )
 
-st.title("🤖CHOTU")
+st.title("🤖Chatbot")
 
 # initiate chat history
 if "chat_history" not in st.session_state:
